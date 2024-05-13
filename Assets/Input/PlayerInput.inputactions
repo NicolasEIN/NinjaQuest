@@ -16,11 +16,11 @@
                 },
                 {
                     "name": "Attack",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "5c074e63-b27a-41c4-9e1f-3bc576c7559e",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Hold(duration=0.1)",
                     "initialStateCheck": false
                 }
             ],
@@ -137,8 +137,8 @@
                 },
                 {
                     "name": "",
-                    "id": "bebb6a97-fd8b-42cc-8cb8-12080e56b4bc",
-                    "path": "<Keyboard>/space",
+                    "id": "6648c564-0388-434d-823a-8abd47c71fd8",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

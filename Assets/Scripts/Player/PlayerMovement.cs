@@ -38,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
         OnMove();
     }
 
-    void OnMove()
+    public void OnMove()
     {
         move.Set(InputManager.movement.x, InputManager.movement.y);
 

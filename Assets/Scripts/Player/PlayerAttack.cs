@@ -1,39 +1,97 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Windows;
 
 public class PlayerAttack : MonoBehaviour
 {
-    private Animator animator;
-    private bool attackCheck; 
-    [SerializeField] float animationTimeControl;
-    private const string attack = "Attack";
+    //Variáveis de animação
+    Animator animator;
+    const string attackTrigger = "Attack";
+    private bool isPressed = false;
+    bool isAttackPressed = false;
+
+    //Variáveis de ataque
+    [SerializeField] GameObject swordPlaceHolder;
+    public InputActionReference attackAction;
+    [SerializeField]float swordTime; 
+
     private void Awake()
     {
         animator = GetComponentInChildren<Animator>();
     }
-    private void Update()
+
+
+    private void OnEnable()
     {
-        if (InputManager.isAttacking && !attackCheck)
+        attackAction.action.started += OnAttackStarted;
+        attackAction.action.performed += OnAttackPerformed;
+        attackAction.action.canceled += OnAttackCanceled;
+    }
+
+    private void OnDisable()
+    {
+        attackAction.action.started -= OnAttackStarted;
+        attackAction.action.performed -= OnAttackPerformed;
+        attackAction.action.canceled -= OnAttackCanceled;
+    }
+
+   public void OnAttackStarted(InputAction.CallbackContext context)
+    {
+        if (!isPressed)
         {
-            StartCoroutine(AttackCourotine()); ;
+            isPressed = true;
+            InputManager.isAttacking = true;
+            animator.SetTrigger(attackTrigger);
+            ActivateSwordAttack();
+            //Debug.Log("Attack");
         }
     }
 
-
-    private IEnumerator AttackCourotine()
+   public void OnAttackPerformed(InputAction.CallbackContext context)
     {
-        attackCheck = true;
-        PerformAttack();
-        yield return new WaitForSeconds(animationTimeControl);
-        attackCheck = false;
+        if (isPressed)
+        {
+            isPressed = false;
+            InputManager.isAttacking = false;
+            StartCoroutine(DeactivateSwordAfterDelay());
+
+        }
     }
 
-    void PerformAttack()
+    public void OnAttackCanceled(InputAction.CallbackContext context)
     {
-        animator.SetTrigger(attack);
-        Debug.Log("Ataque");
+        if (isPressed)
+        {
+            isPressed = false;
+            InputManager.isAttacking = false;
+            StartCoroutine(DeactivateSwordAfterDelay());
+        }
+    }
+
+    void ActivateSwordAttack()
+    {
+        if (isAttackPressed)
+        {
+            swordPlaceHolder.SetActive(true);
+
+        }
+    }
+    void DeactivateSwordAttack()
+    {
+        if (!isAttackPressed)
+        {
+            swordPlaceHolder.SetActive(false);
+        }
+    }
+    IEnumerator DeactivateSwordAfterDelay()
+    {
+        // Aguarda pelo tempo especificado
+        yield return new WaitForSeconds(swordTime);
+        // Desativa a espada após o tempo especificado
+        DeactivateSwordAttack();
     }
 }
