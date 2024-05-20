@@ -26,7 +26,7 @@ public class PersistenceManager : MonoBehaviour
         if (!dataLoaded && scene.buildIndex != 0)
         {
             Debug.Log("Cena inicializada e dados de persistência carregados");
-            Object.DontDestroyOnLoad(Object.Instantiate(Resources.Load("PERSISTDATA")));
+            Object.DontDestroyOnLoad(Object.Instantiate(Resources.Load("PersistenceManagerGO")));
             dataLoaded = true; // Marcar como carregado para evitar carregar novamente
         }
     }
