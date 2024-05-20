@@ -1,123 +1,123 @@
 using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class EnemyAI : MonoBehaviour
+
+public class ChaseAI : MonoBehaviour
 {
-    [SerializeField] private EnemyData enemyData; // Reference to the EnemyData ScriptableObject
+    // Ponto para o qual o personagem irá se mover
+    private GameObject Player;
+    // Variável NavMeshAgent para configurar a movimentação do personagem
+    private NavMeshAgent agent;
+    // Ponto de retorno caso o jogador esteja fora do alcance
+    public Transform returnPoint;
+    // Distância máxima permitida para iniciar a perseguição
+    public float chaseDistance;
+    // Distância mínima para continuar a perseguição
+    public float giveUpDistance;
+    // LayerMask para detectar obstáculos
+    public LayerMask obstacleLayer;
 
-    private Transform player; // Reference to the player
-    private Rigidbody2D rb2d; // Reference to the enemy's Rigidbody2D
-    private Vector2 originalPosition; // Store the original position of the enemy
-    private bool playerDetected; // Track if the player is detected
-    private bool isReturningToOrigin; // Track if the enemy is returning to the origin
+    // Componentes de animação
+    private Animator animator;
+    private Vector2 move;
+    private Vector2 facingDirection = Vector2.down;
 
-    private void Awake()
+    // Animação variables
+    private const string isWalking = "IsWalking";
+    private const string horizontal = "Horizontal";
+    private const string vertical = "Vertical";
+    private const string lastHorizontal = "LastHorizontal";
+    private const string lastVertical = "LastVertical";
+
+    void Start()
     {
-        rb2d = GetComponent<Rigidbody2D>();
-        originalPosition = transform.position; // Store the original position
+        // Pega o Componente NavMeshAgent
+        agent = GetComponent<NavMeshAgent>();
+        // Variáveis setadas como False para não utilizar os eixos Y baseado em 3 dimensões
+        agent.updateRotation = false;
+        agent.updateUpAxis = false;
+        // Encontra o ponto na cena
+        Player = GameObject.FindGameObjectWithTag("Player");
+        // Pega o componente Animator
+        animator = GetComponentInChildren<Animator>();
     }
 
-    private void Start()
+    void Update()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        // Verifica a distância entre o inimigo e o jogador
+        float distanceToPlayer = Vector3.Distance(transform.position, Player.transform.position);
 
-        if (player == null)
+        // Verifica se há linha de visão direta para o jogador
+        bool canSeePlayer = !Physics.Linecast(transform.position, Player.transform.position, obstacleLayer);
+
+        if (distanceToPlayer <= chaseDistance && canSeePlayer)
         {
-            Debug.LogError("Player not found! Ensure the player has the 'Player' tag.");
+            // Faz o personagem se locomover pelo cenário até o jogador
+            agent.SetDestination(Player.transform.position);
+        }
+        else if (distanceToPlayer > giveUpDistance || !canSeePlayer)
+        {
+            // Faz o personagem retornar para o ponto de retorno
+            agent.SetDestination(returnPoint.position);
+        }
+
+        // Atualiza a variável de movimento para o Animator
+        move = new Vector2(agent.velocity.x, agent.velocity.y);
+        bool isMoving = move != Vector2.zero;
+        animator.SetBool(isWalking, isMoving);
+
+        // Atualiza a direção de movimento
+        if (isMoving)
+        {
+            facingDirection = move.normalized;
+            animator.SetFloat(horizontal, move.x);
+            animator.SetFloat(vertical, move.y);
+            animator.SetFloat(lastHorizontal, move.x);
+            animator.SetFloat(lastVertical, move.y);
         }
     }
 
-    private void Update()
+    void FixedUpdate()
     {
-        if (player == null) return;
+        // Atualiza a variável de movimento para o Animator
+        move = new Vector2(agent.velocity.x, agent.velocity.y);
+        bool isMoving = move != Vector2.zero;
+        animator.SetBool(isWalking, isMoving);
 
-        // Check the distance to the player
-        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-
-        if (distanceToPlayer <= enemyData.detectionRadius)
+        // Atualiza a direção de movimento
+        if (isMoving)
         {
-            playerDetected = true;
-            isReturningToOrigin = false;
-
-            // Move towards the player if outside the attack distance
-            if (distanceToPlayer > enemyData.attackDistance)
-            {
-                MoveTowardsPlayer();
-            }
-            else
-            {
-                // Attack the player if within attack distance
-                AttackPlayer();
-            }
-        }
-        else
-        {
-            playerDetected = false;
-
-            // Return to origin if player is not detected
-            if (!isReturningToOrigin)
-            {
-                StartCoroutine(ReturnToOrigin());
-            }
+            facingDirection = move.normalized;
+            animator.SetFloat(horizontal, move.x);
+            animator.SetFloat(vertical, move.y);
+            animator.SetFloat(lastHorizontal, move.x);
+            animator.SetFloat(lastVertical, move.y);
         }
     }
 
-    private void MoveTowardsPlayer()
-    {
-        Vector2 direction = (player.position - transform.position).normalized;
-        rb2d.velocity = direction * enemyData.moveSpeed;
-    }
+    ////Ponto para o qual o personagem irá se mover
+    //private GameObject Player;
+    ////Variável NavMeshAgent Para configurar A movimentação do personagem
+    //private NavMeshAgent agent;
+    //void Start()
+    //{
+    //    //Pega o Componente NavMeshAgent
+    //    agent = GetComponent<NavMeshAgent>();
+    //    //Variaveis setadas como False para Não utilizar os eixos Y Baseado em 3 dimensões
+    //    agent.updateRotation = false;
+    //    agent.updateUpAxis = false;
+    //    // Encontra o ponto Na cena
+    //    Player = GameObject.FindGameObjectWithTag("Player");
 
-    private void AttackPlayer()
-    {
-        rb2d.velocity = Vector2.zero; // Stop moving
+    //}
 
-        // Here you would trigger an attack animation or behavior
-        Debug.Log("Enemy attacks the player!");
-    }
 
-    private IEnumerator ReturnToOrigin()
-    {
-        isReturningToOrigin = true;
-
-        while (Vector2.Distance(transform.position, originalPosition) > 0.1f)
-        {
-            Vector2 direction = (originalPosition - (Vector2)transform.position).normalized;
-            rb2d.velocity = direction * enemyData.moveSpeed;
-            yield return null;
-        }
-
-        rb2d.velocity = Vector2.zero;
-        isReturningToOrigin = false;
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            // You can handle interactions here if needed
-            Debug.Log("Player detected by the enemy!");
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            Debug.Log("Player lost by the enemy!");
-        }
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        if (enemyData == null) return;
-
-        // Visualize the detection radius in the editor
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, enemyData.detectionRadius);
-
-        // Visualize the attack distance in the editor
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, enemyData.attackDistance);
-    }
+    //void Update()
+    //{
+    //    //Faz o personagem se locomover pelo cenario até o point
+    //    agent.SetDestination(Player.transform.position);
+    //}
 }
