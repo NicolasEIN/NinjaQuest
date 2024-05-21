@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3279929951493179499}
   - component: {fileID: 4883165843060129986}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SwordGraphics
   m_TagString: PlayerSword
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 918188355871298439}
   - component: {fileID: 7213644821754120647}
   - component: {fileID: 3925801956946993654}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -135,7 +135,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   swordPlaceHolder: {fileID: 9138467727486581246}
   swordTime: 0.15
+  knockbackForce: 0
   attackRange: 0
+  attackDamage: 0
   attackCooldown: 0.55
   inputReader: {fileID: 11400000, guid: 1053c49679e5bd545a537a1d15700f57, type: 2}
 --- !u!114 &918188355871298439
@@ -235,9 +237,9 @@ GameObject:
   - component: {fileID: 8681606879355536028}
   - component: {fileID: 6758619666269270174}
   - component: {fileID: 220655855063192330}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Graphics
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -339,7 +341,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5085624781467036369}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SwordObject
   m_TagString: Weapon
   m_Icon: {fileID: 0}

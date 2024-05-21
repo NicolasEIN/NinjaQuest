@@ -10,11 +10,12 @@ public class PlayerCombat : MonoBehaviour
     private Animator animator;
     const string attackTrigger = "IsAttacking";
 
-
     // Attack variables
     [SerializeField] private GameObject swordPlaceHolder;
     [SerializeField] private float swordTime;
+    [SerializeField] private float knockbackForce;
     [SerializeField] private float attackRange;
+    [SerializeField] private float attackDamage; // Adiciona a variável de dano
 
     // Cooldown variables
     private float lastAttackTime = 0f;
@@ -25,10 +26,6 @@ public class PlayerCombat : MonoBehaviour
 
     private PlayerMove playerMove;
 
-    //// Knockback variables
-    //[SerializeField] private float knockbackForce = 10f;
-    //[SerializeField] private float knockbackDuration = 0.2f;
-
     private void Awake()
     {
         animator = GetComponentInChildren<Animator>();
@@ -37,10 +34,9 @@ public class PlayerCombat : MonoBehaviour
 
     private void Start()
     {
-
         if (inputReader == null)
         {
-            Debug.LogError("InputReader reference is missing in PlayerAttack script!");
+            Debug.LogError("InputReader reference is missing in PlayerCombat script!");
             return;
         }
     }
@@ -66,11 +62,12 @@ public class PlayerCombat : MonoBehaviour
             playerMove.isAttacking = true;
             Debug.Log("Attack");
         }
+
+
     }
 
     void ActivateSwordAttack()
     {
-
         // Rotaciona a espada baseada na direção do jogador
         Vector2 facingDirection = playerMove.facingDirection;
         float angleZ = 0;
@@ -89,7 +86,7 @@ public class PlayerCombat : MonoBehaviour
         else if (facingDirection == Vector2.right)
         {
             angleZ = 90;
-            angleX = 0; 
+            angleX = 0;
         }
         else if (facingDirection == Vector2.left)
         {
@@ -99,8 +96,6 @@ public class PlayerCombat : MonoBehaviour
 
         swordPlaceHolder.transform.rotation = Quaternion.Euler(angleX, 0, angleZ);
         swordPlaceHolder.SetActive(true);
-
-
     }
 
     void DeactivateSwordAttack()
@@ -117,4 +112,28 @@ public class PlayerCombat : MonoBehaviour
         playerMove.isAttacking = false;
     }
 
-}
+    // Método para detectar colisão da espada com inimigos
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (swordPlaceHolder.activeSelf)
+        {
+            IDamageable damageable = other.GetComponent<IDamageable>();
+            if (damageable != null)
+            {
+                damageable.TakeDamage(attackDamage);
+
+                // Calcula a direção do knockback
+                Vector2 knockbackDirection = (other.transform.position - transform.position).normalized;
+
+                // Aplica a força de knockback
+                Rigidbody2D rb = other.GetComponent<Rigidbody2D>();
+                if (rb != null)
+                {
+                    rb.velocity = Vector2.zero; // Zera a velocidade atual para evitar interferência
+                    rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
+                }
+            }
+        }
+
+    }
+ }
