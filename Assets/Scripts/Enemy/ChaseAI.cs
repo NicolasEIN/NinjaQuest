@@ -7,22 +7,24 @@ using UnityEngine.AI;
 
 public class ChaseAI : MonoBehaviour
 {
-    private GameObject player;
-    private NavMeshAgent agent;
-    public Transform returnPoint;
     public float chaseDistance;
     public float giveUpDistance;
     public LayerMask obstacleLayer;
-    private Animator animator;
-    private Vector2 move;
-    private Vector2 facingDirection = Vector2.down;
-    private const string isWalking = "IsWalking";
-    private const string horizontal = "Horizontal";
-    private const string vertical = "Vertical";
-    private const string lastHorizontal = "LastHorizontal";
-    private const string lastVertical = "LastVertical";
+    public Transform returnPoint;
 
-    private bool isChasing = false; // Flag para indicar se está perseguindo o jogador
+    private NavMeshAgent agent;
+    private GameObject player;
+    private Animator animator;
+    private bool isChasing = false;
+    private Vector2 move;
+    private Vector2 facingDirection;
+
+    // Animator parameters
+    private readonly int isWalking = Animator.StringToHash("IsWalking");
+    private readonly int horizontal = Animator.StringToHash("Horizontal");
+    private readonly int vertical = Animator.StringToHash("Vertical");
+    private readonly int lastHorizontal = Animator.StringToHash("LastHorizontal");
+    private readonly int lastVertical = Animator.StringToHash("LastVertical");
 
     void Start()
     {
@@ -30,7 +32,7 @@ public class ChaseAI : MonoBehaviour
         agent.updateRotation = false;
         agent.updateUpAxis = false;
         player = GameObject.FindGameObjectWithTag("Player");
-        animator = GetComponentInChildren<Animator>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -44,29 +46,33 @@ public class ChaseAI : MonoBehaviour
             agent.SetDestination(player.transform.position);
             isChasing = true;
         }
-        else if (isChasing && distanceToPlayer > giveUpDistance || !canSeePlayer)
+        else if (isChasing && (distanceToPlayer > giveUpDistance || !canSeePlayer))
         {
             // Se estava perseguindo mas saiu do alcance, para e retorna ao ponto de origem
             isChasing = false;
-            agent.ResetPath();
+            agent.SetDestination(returnPoint.position);
         }
 
-        // Atualiza a animação apenas se estiver perseguindo ou retornando ao ponto de origem
-        if (isChasing || (returnPoint && !isChasing && distanceToPlayer > giveUpDistance))
+        // Atualiza a animação
+        move = new Vector2(agent.velocity.x, agent.velocity.z); // Considerando o eixo Y para movimento horizontal e Z para vertical no NavMesh
+        bool isMoving = move != Vector2.zero;
+        animator.SetBool(isWalking, isMoving);
+
+        if (isMoving)
         {
-            move = new Vector2(agent.velocity.x, agent.velocity.y);
-            bool isMoving = move != Vector2.zero;
-            animator.SetBool(isWalking, isMoving);
-
-            if (isMoving)
-            {
-                facingDirection = move.normalized;
-                animator.SetFloat(horizontal, move.x);
-                animator.SetFloat(vertical, move.y);
-                animator.SetFloat(lastHorizontal, move.x);
-                animator.SetFloat(lastVertical, move.y);
-            }
+            facingDirection = move.normalized;
+            animator.SetFloat(horizontal, move.x);
+            animator.SetFloat(vertical, move.y);
+            animator.SetFloat(lastHorizontal, move.x);
+            animator.SetFloat(lastVertical, move.y);
         }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        // Desenha uma esfera de gizmos para representar o raio de ataque
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, chaseDistance);
     }
 
 }

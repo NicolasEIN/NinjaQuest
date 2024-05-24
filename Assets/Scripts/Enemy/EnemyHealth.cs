@@ -1,17 +1,26 @@
+using System;
 using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour, IDamageable
 {
+
     [SerializeField] private float maxHealth = 100f;
     private float currentHealth;
 
-    [SerializeField] private float invincibilityTime = 1.5f; // Tempo de invencibilidade após ser atingido
-    private bool isInvincible = false; // Flag para controlar o estado de invencibilidade
-    private float invincibilityTimer = 0f; // Contador de tempo de invencibilidade
+    [SerializeField] private float invincibilityTime = 1.5f;
+    private bool isInvincible = false;
+    private float invincibilityTimer = 0f;
+
+    // Event to notify when health changes
+    public event Action<float> OnHealthChanged;
+
+    public float MaxHealth => maxHealth;
+    public float CurrentHealth => currentHealth;
 
     private void Start()
     {
         currentHealth = maxHealth;
+        OnHealthChanged?.Invoke(currentHealth);
     }
 
     private void Update()
@@ -21,7 +30,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
             invincibilityTimer -= Time.deltaTime;
             if (invincibilityTimer <= 0f)
             {
-                isInvincible = false; // Desativa o estado de invencibilidade quando o tempo acabar
+                isInvincible = false;
             }
         }
     }
@@ -30,14 +39,14 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     {
         if (!isInvincible)
         {
-            Debug.Log($"{gameObject.name} Vida atual:  {currentHealth}");
             currentHealth -= amount;
+            OnHealthChanged?.Invoke(currentHealth);
+
             if (currentHealth <= 0)
             {
                 Die();
             }
 
-            // Ativa o estado de invencibilidade
             isInvincible = true;
             invincibilityTimer = invincibilityTime;
         }
@@ -45,8 +54,9 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     private void Die()
     {
-        // Lógica de morte (desativar objeto, tocar animação de morte, etc.)
         Debug.Log($"{gameObject.name} morreu.");
         Destroy(gameObject);
     }
+
+
 }

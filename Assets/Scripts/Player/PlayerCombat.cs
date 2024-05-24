@@ -10,21 +10,20 @@ public class PlayerCombat : MonoBehaviour
     private Animator animator;
     const string attackTrigger = "IsAttacking";
 
-    // Attack variables
-    [SerializeField] private GameObject swordPlaceHolder;
-    [SerializeField] private float swordTime;
-    [SerializeField] private float knockbackForce;
-    [SerializeField] private float attackRange;
-    [SerializeField] private float attackDamage; // Adiciona a variável de dano
-
-    // Cooldown variables
-    private float lastAttackTime = 0f;
-    [SerializeField] private float attackCooldown; // Tempo de cooldown entre ataques
-
     // InputReader reference
     [SerializeField] private InputReader inputReader;
 
     private PlayerMove playerMove;
+
+    // Referência para a arma
+    [SerializeField] private GameObject weapon;
+
+    // Variáveis de cooldown e tempo de ataque da espada
+    [SerializeField] private float swordTime;
+    [SerializeField] private float attackCooldown; // Tempo de cooldown entre ataques
+
+    // Tempo do último ataque
+    private float lastAttackTime = 0f;
 
     private void Awake()
     {
@@ -53,87 +52,65 @@ public class PlayerCombat : MonoBehaviour
 
     private void OnAttack()
     {
-        if (Time.time - lastAttackTime >= attackCooldown)
+        if (Time.time - lastAttackTime >= attackCooldown && !playerMove.isAttacking)
         {
-            lastAttackTime = Time.time; // Atualiza o tempo do último ataque
+            // Ativa a animação de ataque
             animator.SetBool(attackTrigger, true);
-            ActivateSwordAttack();
-            StartCoroutine(DeactivateSwordAfterDelay());
+
+            // Ativa a arma
+            weapon.SetActive(true);
+
+            // Rotaciona a espada baseada na direção do jogador
+            Vector3 facingDirection = playerMove.facingDirection;
+            float angleZ = 0;
+            float angleX = 0;
+
+            if (facingDirection == Vector3.up)
+            {
+                angleX = 180;
+                angleZ = 0;
+            }
+            else if (facingDirection == Vector3.down)
+            {
+                angleZ = 0;
+                angleX = 0;
+            }
+            else if (facingDirection == Vector3.right)
+            {
+                angleZ = 90;
+                angleX = 0;
+            }
+            else if (facingDirection == Vector3.left)
+            {
+                angleZ = -90;
+                angleX = 180;
+            }
+
+            weapon.transform.rotation = Quaternion.Euler(angleX, 0, angleZ);
+
+            // Inicia a rotina para desativar a arma após um tempo
+            StartCoroutine(DeactivateWeaponAfterDelay());
+
+            // Atualiza o tempo do último ataque
+            lastAttackTime = Time.time;
+
+            // Impede o movimento durante o ataque
             playerMove.isAttacking = true;
-            Debug.Log("Attack");
         }
-
-
     }
 
-    void ActivateSwordAttack()
+    private IEnumerator DeactivateWeaponAfterDelay()
     {
-        // Rotaciona a espada baseada na direção do jogador
-        Vector2 facingDirection = playerMove.facingDirection;
-        float angleZ = 0;
-        float angleX = 0;
-
-        if (facingDirection == Vector2.up)
-        {
-            angleX = 180;
-            angleZ = 0;
-        }
-        else if (facingDirection == Vector2.down)
-        {
-            angleZ = 0;
-            angleX = 0;
-        }
-        else if (facingDirection == Vector2.right)
-        {
-            angleZ = 90;
-            angleX = 0;
-        }
-        else if (facingDirection == Vector2.left)
-        {
-            angleZ = -90;
-            angleX = 180;
-        }
-
-        swordPlaceHolder.transform.rotation = Quaternion.Euler(angleX, 0, angleZ);
-        swordPlaceHolder.SetActive(true);
-    }
-
-    void DeactivateSwordAttack()
-    {
-        swordPlaceHolder.SetActive(false);
-        Debug.Log("O Ataque foi concluído");
-    }
-
-    IEnumerator DeactivateSwordAfterDelay()
-    {
+        // Aguarda o tempo da animação de ataque
         yield return new WaitForSeconds(swordTime);
-        DeactivateSwordAttack();
+
+        // Desativa a animação de ataque
         animator.SetBool(attackTrigger, false);
+
+        // Desativa a arma
+        weapon.SetActive(false);
+
+        // Permite o movimento após o término do ataque
         playerMove.isAttacking = false;
     }
-
-    // Método para detectar colisão da espada com inimigos
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (swordPlaceHolder.activeSelf)
-        {
-            IDamageable damageable = other.GetComponent<IDamageable>();
-            if (damageable != null)
-            {
-                damageable.TakeDamage(attackDamage);
-
-                // Calcula a direção do knockback
-                Vector2 knockbackDirection = (other.transform.position - transform.position).normalized;
-
-                // Aplica a força de knockback
-                Rigidbody2D rb = other.GetComponent<Rigidbody2D>();
-                if (rb != null)
-                {
-                    rb.velocity = Vector2.zero; // Zera a velocidade atual para evitar interferência
-                    rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
-                }
-            }
-        }
-
-    }
- }
+}

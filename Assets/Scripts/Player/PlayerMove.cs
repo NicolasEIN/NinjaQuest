@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
+
     // Movement variables
     [SerializeField] private float speed;
     private Vector2 move;
     public bool isAttacking { get; set; }
+
+    // Knockback variables
+    private bool isKnockedBack;
+    private float knockbackDuration = 0.2f; // Duration for which the knockback effect is applied
 
     // Component variables
     private Rigidbody2D rigidBody2d;
@@ -29,7 +34,6 @@ public class PlayerMove : MonoBehaviour
     // Direction the player is facing
     public Vector2 facingDirection { get; private set; } = Vector2.down;
 
-
     private void Awake()
     {
         rigidBody2d = GetComponent<Rigidbody2D>();
@@ -38,7 +42,6 @@ public class PlayerMove : MonoBehaviour
 
     private void Start()
     {
-
         if (inputReader == null)
         {
             Debug.LogError("InputReader reference is missing in PlayerMove script!");
@@ -47,7 +50,6 @@ public class PlayerMove : MonoBehaviour
 
         inputReader.MoveEvent += OnMove;
     }
-
 
     private void Update()
     {
@@ -64,16 +66,9 @@ public class PlayerMove : MonoBehaviour
 
     private void FixedUpdate() // Use FixedUpdate for physics updates
     {
-        if (!isAttacking)
+        if (!isAttacking && !isKnockedBack)
         {
             rigidBody2d.velocity = move * speed;
-        }
-        else
-        {
-            rigidBody2d.velocity = Vector2.zero; // Ensure movement stops if attacking
-
-            animator.SetFloat(horizontal, 0);
-            animator.SetFloat(vertical, 0);
         }
     }
 
@@ -87,7 +82,7 @@ public class PlayerMove : MonoBehaviour
 
     public void OnMove(Vector2 movement)
     {
-
+        if (isKnockedBack) return; // Ignore movement input during knockback
 
         move = movement;
         rigidBody2d.velocity = move * speed;
@@ -108,8 +103,24 @@ public class PlayerMove : MonoBehaviour
            ref _movementInputSmoothVelocity, 0.1f);
 
         Vector3 direction = new Vector3(_smoothedMovementInput.x, _smoothedMovementInput.y, 0f);
-
-
     }
+
+    public void ApplyKnockback(Vector2 direction, float force)
+    {
+        if (!isKnockedBack)
+        {
+            isKnockedBack = true;
+            rigidBody2d.velocity = Vector2.zero;
+            rigidBody2d.AddForce(direction * force, ForceMode2D.Impulse);
+            StartCoroutine(KnockbackRecovery());
+        }
+    }
+
+    private IEnumerator KnockbackRecovery()
+    {
+        yield return new WaitForSeconds(knockbackDuration);
+        isKnockedBack = false;
+    }
+
 }
 
