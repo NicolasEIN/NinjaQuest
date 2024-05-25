@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: SpawnBudaDG
   m_EditorClassIdentifier: 
   spawnPointObject: {fileID: 0}
-  spawnPosition: {x: 4.82, y: -27.93565}
+  spawnPosition: {x: 20.1, y: -2.2}

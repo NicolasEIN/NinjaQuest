@@ -12,9 +12,6 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     [SerializeField] private float maxHealth = 100f;
     private float currentHealth;
 
-    // Referências aos componentes ou objetos a serem desativados
-    [SerializeField] private MonoBehaviour[] componentsToDisable; // Use MonoBehaviour para scripts e componentes
-    [SerializeField] private GameObject[] objectsToDisable; // Use GameObject para objetos inteiros
 
     // Event to notify when health changes
     public event Action<float> OnHealthChanged;
@@ -26,7 +23,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     {
         currentHealth = maxHealth;
         OnHealthChanged?.Invoke(currentHealth);
-        gameOverCanvas.SetActive(false); // Certifique-se de que o Canvas está desativado no início
+        SetGameOverCanvasActive(false); // Certifique-se de que o Canvas está desativado no início
     }
 
     private void Update()
@@ -80,21 +77,25 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     public void Die()
     {
         Debug.Log("Player morreu.");
-        gameOverCanvas.SetActive(true); // Ativa o Canvas de Game Over
+        SetGameOverCanvasActive(true); // Ativa o Canvas de Game Over
+        PauseGame(); // Pausa o jogo
+    }
 
-        // Desativa componentes
-        foreach (var component in componentsToDisable)
+    private void SetGameOverCanvasActive(bool active)
+    {
+        if (gameOverCanvas != null)
         {
-            component.enabled = false;
+            gameOverCanvas.SetActive(active);
         }
-
-        // Desativa objetos
-        foreach (var obj in objectsToDisable)
+        else
         {
-            obj.SetActive(false);
+            Debug.LogWarning("O GameObject do canvas de game over não está atribuído.");
         }
+    }
 
-        // Se você precisar desativar outras funcionalidades do jogo quando o jogador morrer, faça isso aqui.
+    private void PauseGame()
+    {
+        Time.timeScale = 0f; // Define a escala de tempo para zero, pausando o jogo
     }
 
 }

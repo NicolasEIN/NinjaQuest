@@ -3,37 +3,55 @@ using UnityEngine.SceneManagement;
 
 public class PersistenceManager : MonoBehaviour
 {
-    private static bool dataLoaded = false;
-
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void OnBeforeSceneLoad()
-    {
-        // Adiciona o PersistenceManager à primeira cena
-        GameObject persistenceManager = new GameObject("PersistenceManager");
-        persistenceManager.AddComponent<PersistenceManager>();
-        DontDestroyOnLoad(persistenceManager);
-    }
+    private static PersistenceManager instance;
 
     private void Awake()
     {
-        // Registra um método para ser chamado quando uma nova cena é carregada
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        // Se os dados de persistência ainda não foram carregados e a cena não é a cena 0
-        if (!dataLoaded && scene.buildIndex != 0)
+        // Se não houver uma instância do PersistenceManager, define esta como a instância atual e a mantém entre as cenas
+        if (instance == null)
         {
-            Debug.Log("Cena inicializada e dados de persistência carregados");
-            Object.DontDestroyOnLoad(Object.Instantiate(Resources.Load("PersistenceManagerGO")));
-            dataLoaded = true; // Marcar como carregado para evitar carregar novamente
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            // Se já houver uma instância do PersistenceManager, destrói esta para evitar duplicatas
+            Destroy(gameObject);
         }
     }
 
-    // Certifique-se de desregistrar o evento quando este objeto for destruído para evitar erros
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Se a cena carregada for o menu principal, destrua este objeto de persistência
+        if (scene.name == "MainMenu")
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    // Este método pode ser chamado para garantir que o PersistenceManager seja destruído manualmente quando necessário
+    public static void DestroyPersistenceManager()
+    {
+        if (instance != null)
+        {
+            Destroy(instance.gameObject);
+        }
+    }
+
+    // Este método pode ser chamado para criar novamente o PersistenceManager se ele for destruído
+    public static void CreatePersistenceManager()
+    {
+        if (instance == null)
+        {
+            GameObject persistenceManager = new GameObject("PersistenceManager");
+            instance = persistenceManager.AddComponent<PersistenceManager>();
+            DontDestroyOnLoad(persistenceManager);
+        }
+    }
+
 }

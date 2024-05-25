@@ -43,16 +43,12 @@ public class InputReader : ScriptableObject, Controls.IGameplayActions
         }
     }
 
+
     public void OnInteraction(InputAction.CallbackContext context)
     {
-        if (isInteracting || Time.time < interactionCooldownTimer) return; // Check for cooldown
-
-        if (context.performed)
+        if (InteractionEvent != null && context.performed)
         {
-            InteractionEvent?.Invoke(); // Invoke interaction event if not null
-            isInteracting = false;
-            interactionCooldownTimer = Time.time + 0.15f; // Set cooldown (adjust as needed)
-            Debug.Log("Interagio");
+            InteractionEvent.Invoke();
         }
     }
 
