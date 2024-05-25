@@ -5,10 +5,10 @@ using static UnityEngine.EventSystems.EventTrigger;
 
 public class Interaction : MonoBehaviour
 {
-
     public float interactionRange = 3f; // Alcance da interação
     public InputReader inputReader; // Referência ao InputReader
     public UnityEvent onInteract; // Evento Unity que será chamado quando o jogador interagir
+    public UnityEvent onExitInteract; // Evento Unity que será chamado quando o jogador sair do alcance de interação
 
     private bool inRange = false; // Verifica se o jogador está dentro do alcance de interação
 
@@ -40,7 +40,7 @@ public class Interaction : MonoBehaviour
         {
             inRange = false;
             Debug.Log("Não está no Range de Interação");
-
+            onExitInteract.Invoke(); // Chama o evento de saída de interação
         }
     }
 
@@ -49,4 +49,5 @@ public class Interaction : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, interactionRange);
     }
+
 }

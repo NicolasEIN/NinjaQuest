@@ -9,6 +9,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float speed;
     private Vector2 move;
     public bool isAttacking { get; set; }
+    public bool isInteracting { get; set; }
 
     // Knockback variables
     private bool isKnockedBack;
@@ -53,7 +54,7 @@ public class PlayerMove : MonoBehaviour
 
     private void Update()
     {
-        if (isAttacking)
+        if (isAttacking || isInteracting )
         {
             // Stop movement
             move = Vector2.zero;
@@ -62,6 +63,16 @@ public class PlayerMove : MonoBehaviour
             animator.SetFloat(horizontal, 0);
             animator.SetFloat(vertical, 0);
         }
+
+        //if (isAttacking)
+        //{
+        //    // Stop movement
+        //    move = Vector2.zero;
+        //    rigidBody2d.velocity = Vector2.zero;
+
+        //    animator.SetFloat(horizontal, 0);
+        //    animator.SetFloat(vertical, 0);
+        //}
     }
 
     private void FixedUpdate() // Use FixedUpdate for physics updates
