@@ -12,4 +12,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04e2350fa0a38134fb993b5a35d0c3e7, type: 3}
   m_Name: InputReader
   m_EditorClassIdentifier: 
-  isInteracting: 1

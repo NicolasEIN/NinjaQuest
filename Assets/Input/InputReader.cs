@@ -46,12 +46,16 @@ public class InputReader : ScriptableObject, Controls.IGameplayActions
 
     public void OnInteraction(InputAction.CallbackContext context)
     {
-        if (InteractionEvent != null && context.performed)
+        if (context.performed)
         {
-            InteractionEvent.Invoke();
+            isInteracting = true;
+            InteractionEvent?.Invoke();
+        }
+        else if (context.canceled)
+        {
+            isInteracting = false;
         }
     }
-
 
     public void OnMove(InputAction.CallbackContext context)
     {
