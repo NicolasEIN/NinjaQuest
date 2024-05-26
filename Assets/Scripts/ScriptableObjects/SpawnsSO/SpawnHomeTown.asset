@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: SpawnHomeTown
   m_EditorClassIdentifier: 
   spawnPointObject: {fileID: 0}
-  spawnPosition: {x: -3.69, y: -5.4}
+  spawnPosition: {x: -43.1, y: -28.22}

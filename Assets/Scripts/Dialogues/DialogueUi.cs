@@ -42,34 +42,6 @@ public class DialogueUI : MonoBehaviour
         }
     }
 
-    //[Header("UI Elements")]
-    //[SerializeField] private GameObject dialoguePanel;
-    //[SerializeField] private Image npcImage;
-    //[SerializeField] private TextMeshProUGUI npcNameText;
-    //[SerializeField] private TextMeshProUGUI dialogueText;
 
-
-    //public void ShowDialogue(string dialogue, string npcName, Sprite npcSprite)
-    //{
-    //    // Atualiza o texto do NPC na UI
-    //    npcNameText.text = npcName;
-
-    //    // Atualiza a imagem do NPC na UI
-    //    npcImage.sprite = npcSprite;
-
-    //    // Exibe a UI de diálogo
-    //    dialoguePanel.SetActive(true);
-
-    //    // Exibe o texto do diálogo na UI
-    //    dialogueText.text = dialogue;
-    //}
-
-
-
-    //public void HideDialogue()
-    //{
-    //    // Esconde a UI de diálogo
-    //    dialoguePanel.SetActive(false);
-    //}
 
 }

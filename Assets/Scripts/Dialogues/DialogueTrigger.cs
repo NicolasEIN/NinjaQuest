@@ -103,45 +103,6 @@ public class DialogueTrigger : MonoBehaviour
         // Reseta o estado do diálogo para o início
         story.ResetState();
     }
-        //[Header("NPC Settings")]
-        //[SerializeField] private string npcName;
-        //[SerializeField] private Sprite npcImage; // Imagem do NPC que será exibida durante o diálogo
-
-        //[Header("Ink JSON")]
-        //[SerializeField] private TextAsset inkJSON;
-
-        //private bool isDialogueActive = false; // Flag para verificar se o diálogo já está ativo
-        //[SerializeField] private DialogueUI dialogueUI; // Referência para o componente DialogueUI
-
-        //private void Start()
-        //{
-        //    // Esconde a UI de diálogo no início
-        //    dialogueUI.HideDialogue();
-        //}
-
-        //public void Interact()
-        //{
-        //    if (isDialogueActive) return; // Evita iniciar o diálogo novamente se já estiver ativo
-
-        //    isDialogueActive = true;
-        //    TriggerDialogue();
-        //}
-
-        //private void TriggerDialogue()
-        //{
-        //    Debug.Log("Diálogo iniciado com " + npcName);
-        //    Debug.Log(inkJSON.text);
-        //    // Exibe a UI de diálogo com o texto do NPC e a imagem do NPC
-        //    dialogueUI.ShowDialogue(inkJSON.text, npcName, npcImage);
-        //    // Você pode adicionar o código para iniciar o diálogo usando o Ink aqui, se necessário
-        //}
-
-        //// Método para resetar a flag ao sair do alcance do NPC
-        //public void ResetDialogue()
-        //{
-        //    isDialogueActive = false;
-        //    dialogueUI.HideDialogue(); // Esconde a UI de diálogo ao sair do alcance do NPC
-        //    Debug.Log("Diálogo resetado");
-        //}
+    
 
     }
