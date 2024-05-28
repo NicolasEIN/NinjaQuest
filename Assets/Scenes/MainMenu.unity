@@ -337,7 +337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1574f41493252b4e8eb17017c76fbd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuCanvas: {fileID: 0}
+  menuCanvas: {fileID: 1949212604}
   loadingCanvas: {fileID: 1753968742}
   loadingBar: {fileID: 606894550}
   txtPercentage: {fileID: 315087460}
@@ -595,7 +595,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2450181160634580592, guid: bb9b00019e878ad4ab694f9f0769cc34, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4738734200370817215, guid: bb9b00019e878ad4ab694f9f0769cc34, type: 3}
       propertyPath: m_LocalScale.x
@@ -611,7 +611,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6294926097023919157, guid: bb9b00019e878ad4ab694f9f0769cc34, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6876114238280840198, guid: bb9b00019e878ad4ab694f9f0769cc34, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -701,6 +701,14 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7622252329858014061, guid: bb9b00019e878ad4ab694f9f0769cc34, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 881145968}
+    - target: {fileID: 7622252329858014061, guid: bb9b00019e878ad4ab694f9f0769cc34, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: QuitGame
+      objectReference: {fileID: 0}
     - target: {fileID: 7764543370372970100, guid: bb9b00019e878ad4ab694f9f0769cc34, type: 3}
       propertyPath: m_Type
       value: 0
@@ -712,6 +720,14 @@ PrefabInstance:
     - target: {fileID: 7764543370372970100, guid: bb9b00019e878ad4ab694f9f0769cc34, type: 3}
       propertyPath: m_Color.a
       value: 0.4117647
+      objectReference: {fileID: 0}
+    - target: {fileID: 8326368140852643819, guid: bb9b00019e878ad4ab694f9f0769cc34, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 881145968}
+    - target: {fileID: 8326368140852643819, guid: bb9b00019e878ad4ab694f9f0769cc34, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: StartLoading
       objectReference: {fileID: 0}
     - target: {fileID: 8430363075848065413, guid: bb9b00019e878ad4ab694f9f0769cc34, type: 3}
       propertyPath: m_Name
@@ -985,7 +1001,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2168574281044721007, guid: 7ead38e7562876e4bb1e5df58030f9fd, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7753351779321770677, guid: 7ead38e7562876e4bb1e5df58030f9fd, type: 3}
       propertyPath: m_Pivot.x
@@ -1069,11 +1085,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8761978414448024176, guid: 7ead38e7562876e4bb1e5df58030f9fd, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8761978414448024176, guid: 7ead38e7562876e4bb1e5df58030f9fd, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1103,6 +1119,11 @@ MonoBehaviour:
   loadingCanvas: {fileID: 1753968742}
   txtPercentage: {fileID: 315087460}
   loadingBar: {fileID: 606894550}
+--- !u!223 &1949212604 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 4874394363611186503, guid: bb9b00019e878ad4ab694f9f0769cc34, type: 3}
+  m_PrefabInstance: {fileID: 1432575570}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2047406360 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6748042877208096247, guid: ab80d5e315a2f8c438621fcf8e3e409b, type: 3}
