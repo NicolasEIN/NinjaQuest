@@ -1,7 +1,5 @@
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Events;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class Interaction : MonoBehaviour
 {

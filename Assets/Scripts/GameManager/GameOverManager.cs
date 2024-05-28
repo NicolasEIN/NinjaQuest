@@ -1,14 +1,19 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameOverManager : MonoBehaviour
-{
-
+{    
     public PersistenceManager persistenceManager; // Adicione uma referência ao PersistenceManager
+    
 
     private void Start()
     {
         persistenceManager = FindObjectOfType<PersistenceManager>(); // Encontre o PersistenceManager
+        
+       
+        
     }
 
     public void ResetGame()

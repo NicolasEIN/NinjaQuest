@@ -1,7 +1,5 @@
 using Ink.Runtime;
-using Ink.UnityIntegration;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DialogueTrigger : MonoBehaviour
@@ -21,7 +19,7 @@ public class DialogueTrigger : MonoBehaviour
     [SerializeField] private float textSpeed = 0.5f; // Velocidade de exibição do texto
 
     private Coroutine dialogueCoroutine; // Referência para a coroutine do diálogo
-
+    
     private void Start()
     {
         dialogueUI.HideDialogue();
@@ -105,4 +103,4 @@ public class DialogueTrigger : MonoBehaviour
     }
     
 
-    }
+ }

@@ -54,6 +54,7 @@ MonoBehaviour:
   weapon: {fileID: 5638477561903893694}
   swordTime: 0.15
   attackCooldown: 0.55
+  soundManager: {fileID: 0}
 --- !u!114 &339794271027150184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,7 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5719760bf5237e94d8ea9d1ab06ecbb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
+  speed: 7
   inputReader: {fileID: 11400000, guid: 1053c49679e5bd545a537a1d15700f57, type: 2}
 --- !u!114 &6479403504067420507
 MonoBehaviour:
@@ -83,6 +84,8 @@ MonoBehaviour:
   invincibilityTime: 0.2
   gameOverCanvas: {fileID: 1060063033061998128, guid: c91aaafbde5b5794d8f930417dda4017, type: 3}
   maxHealth: 100
+  animator: {fileID: 8492413876526929526}
+  soundManager: {fileID: 0}
 --- !u!50 &9195812095111799453
 Rigidbody2D:
   serializedVersion: 4
@@ -219,7 +222,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 8
   m_Sprite: {fileID: 21300000, guid: 010b9aa44d19c6848aa679658d328e21, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.4811321, g: 0.4679994, b: 0.17928979, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -363,7 +366,7 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
@@ -386,9 +389,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 9
+  m_SortingOrder: 8
   m_Sprite: {fileID: 956699685, guid: a35ecfb6126e16144bf96c061b7a282e, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.41568628, g: 0.5686275, b: 0.65882355, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -396,7 +399,7 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
+  m_MaskInteraction: 2
   m_SpriteSortPoint: 0
 --- !u!95 &8492413876526929526
 Animator:

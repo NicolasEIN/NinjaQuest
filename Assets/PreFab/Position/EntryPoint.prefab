@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2799651070234400695}
   - component: {fileID: 4407471700427547797}
-  - component: {fileID: 6146827421086872031}
+  - component: {fileID: 2551114664494053444}
   m_Layer: 0
   m_Name: EntryPoint
   m_TagString: Untagged
@@ -78,7 +78,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.9313354, y: 2.0865564}
   m_EdgeRadius: 0
---- !u!114 &6146827421086872031
+--- !u!114 &2551114664494053444
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -87,9 +87,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 7115894695213015822}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5bcd235578fb3b46b32363f337e8f83, type: 3}
+  m_Script: {fileID: 11500000, guid: ba857751793d0d740bd24d8d38337400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: {fileID: 11400000, guid: 842127bb66412554788a097f89dc1506, type: 2}
-  requireKey: 0
-  keyObject: {fileID: 0}
+  interactionRange: 3
+  inputReader: {fileID: 11400000, guid: 1053c49679e5bd545a537a1d15700f57, type: 2}
+  onInteract:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: EndGameManager, Assembly-CSharp
+        m_MethodName: TriggerGameOver
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onExitInteract:
+    m_PersistentCalls:
+      m_Calls: []

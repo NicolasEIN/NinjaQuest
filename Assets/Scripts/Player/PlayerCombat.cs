@@ -22,8 +22,12 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float swordTime;
     [SerializeField] private float attackCooldown; // Tempo de cooldown entre ataques
 
+    [SerializeField] private SoundManager soundManager;
+
     // Tempo do último ataque
     private float lastAttackTime = 0f;
+
+
 
     private void Awake()
     {
@@ -33,6 +37,8 @@ public class PlayerCombat : MonoBehaviour
 
     private void Start()
     {
+        soundManager = SoundManager.Instance;
+
         if (inputReader == null)
         {
             Debug.LogError("InputReader reference is missing in PlayerCombat script!");
@@ -56,6 +62,8 @@ public class PlayerCombat : MonoBehaviour
         {
             // Ativa a animação de ataque
             animator.SetBool(attackTrigger, true);
+
+            soundManager.PlaySound("Attack");
 
             // Ativa a arma
             weapon.SetActive(true);
